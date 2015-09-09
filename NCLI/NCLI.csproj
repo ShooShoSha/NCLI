@@ -39,9 +39,18 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CommandLine.cs" />
+    <Compile Include="Exceptions\AlreadySelectedException.cs" />
+    <Compile Include="Exceptions\MissingArgumentException.cs" />
+    <Compile Include="Exceptions\MissingOptionException.cs" />
+    <Compile Include="Exceptions\UnrecognizedOptionException.cs" />
+    <Compile Include="HelpFormatter.cs" />
+    <Compile Include="ICommandLineParser.cs" />
     <Compile Include="Option.cs" />
+    <Compile Include="OptionGroup.cs" />
     <Compile Include="Options.cs" />
     <Compile Include="OptionValidator.cs" />
+    <Compile Include="Exceptions\ParseException.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
