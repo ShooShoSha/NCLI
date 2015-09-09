@@ -1,4 +1,8 @@
-﻿/*
+﻿using System;
+using System.Collections.Generic;
+using System.Text;
+
+/*
  * Copyright 2015 Kevin O'Brien
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,11 +17,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace NCLI
 {
@@ -27,26 +26,93 @@ namespace NCLI
     [Serializable]
     public class Option : ICloneable
     {
-        public const int UNINTIALIZED = -1;
+        const int UNINTIALIZED = -1;
+        /// <summary>
+        /// Constant specifying the number of arguments for this <see cref="Option"/> is unlimited.
+        /// </summary>
         public const int UNLIMITED_VALUES = -2;
+        /// <summary>
+        /// Constant specifying the character delimiting the <see cref="Option"/> name from its argument.
+        /// </summary>
+        public const char VALUE_SEPARATOR = '=';
+        /// <summary>
+        /// Constant specifying the default name for the argument of this <see cref="Option"/>.
+        /// </summary>
+        public const string ARG_NAME = "arg";
+        /// <summary>
+        /// Constant specifying the prefix before the long <see cref="Option"/> name.
+        /// </summary>
+        public const string LONG_OPT_PREFIX = "--";
+        /// <summary>
+        /// Constant specifying the prefix before the short <see cref="Option"/> name.
+        /// </summary>
+        public const string SHORT_OPT_PREFIX = "-";
 
         #region Properties
+        /// <summary>
+        /// The abbreviated or short alias for this <see cref="Option"/>.
+        /// </summary>
         public string ShortOption { get; set; }
+        /// <summary>
+        /// The long alias for this <see cref="Option"/>.
+        /// </summary>
         public string LongOption { get; set; }
+        /// <summary>
+        /// Name for each argument of this <see cref="Option"/>.
+        /// </summary>
+        /// <remarks>
+        /// Usually shown during the help message.
+        /// </remarks>
+        /// <seealso cref="HelpFormatter"/>
         public string ArgumentName { get; set; }
+        /// <summary>
+        /// Summary of what the <see cref="Option"/> does and any pertinent information for its arguments, values, ranges, and so on.
+        /// </summary>
+        /// <remarks>
+        /// Usually shown during the help message.
+        /// </remarks>
+        /// <seealso cref="HelpFormatter"/>
         public string Description { get; set; }
+        /// <summary>
+        /// Indicates if this <see cref="Option"/> is required for its command line syntax.
+        /// </summary>
         public bool IsRequired { get; set; }
+        /// <summary>
+        /// Indicates if this <see cref="Option"/>'s arguments are optional.
+        /// </summary>
         public bool HasOptionalArgument { get; set; }
+        /// <summary>
+        /// The number of arguments this <see cref="Option"/> accepts.
+        /// </summary>
+        /// <remarks>
+        /// The typical values for <see cref="NumberOfArguments"/> are <see cref="UNINITIALIZED"/>, <see cref="UNLIMITED_VALUES"/>, or an integer with a value of at least zero (>= 0).
+        /// </remarks>
         public int NumberOfArguments { get; set; }
+        /// <summary>
+        /// The character that delimits the <see cref="Option"/> name (<see cref="ShortOption"/> or <see cref="LongOption"/>) and its arguments.
+        /// </summary>
         public char ValueSeparator { get; set; }
-        // private readonly Class<?> type;
+        /// <summary>
+        /// The arguments stored with this <see cref="Option"/>.
+        /// </summary>
         public List<string> Values { get; set; }
 
+        /// <summary>
+        /// 
+        /// </summary>
         public int ID
         {
             get
             {
-                return ((ShortOption == null) ? LongOption : ShortOption).ElementAt(0);
+                return Key[0];
+            }
+        }
+
+        internal string Key
+        {
+            get
+            {
+                return (ShortOption == null) ? LongOption : ShortOption;
             }
         }
         #endregion
@@ -234,7 +300,6 @@ namespace NCLI
         /// </summary>
         public sealed class Builder
         {
-            // Required parameters
             public string ShortOption { get; set; }
             public string LongOption { get; set; }
             public string Description { get; set; }
@@ -248,68 +313,13 @@ namespace NCLI
             {
                 OptionValidator.Validate(option);
                 ShortOption = option;
-                desc();
-                argName();
-                longOpt();
-                numberOfArgs();
-                optionalArg();
-                required();
-                valueSeparator();
-                hasArg(false);
-            }
-
-            public Builder desc(string desc = "")
-            {
-                Description = desc;
-                return this;
-            }
-
-            public Builder argName(string argName = "arg")
-            {
-                ArgumentName = argName;
-                return this;
-            }
-
-            public Builder longOpt(string longOpt = "")
-            {
-                LongOption = longOpt;
-                return this;
-            }
-
-            public Builder numberOfArgs(int numArgs = 0)
-            {
-                NumberOfArguments = numArgs;
-                return this;
-            }
-
-            public Builder optionalArg(bool isOptional = true)
-            {
-                HasOptionalArgument = isOptional;
-                return this;
-            }
-
-            public Builder required(bool required = true)
-            {
-                IsRequired = required;
-                return this;
-            }
-
-            public Builder valueSeparator(char sep = '=')
-            {
-                ValueSeparator = sep;
-                return this;
-            }
-
-            public Builder hasArg(bool hasArg = true)
-            {
-                NumberOfArguments = hasArg ? 1 : UNINTIALIZED;
-                return this;
-            }
-
-            public Builder hasArgs()
-            {
-                NumberOfArguments = UNLIMITED_VALUES;
-                return this;
+                Description = "";
+                ArgumentName = ARG_NAME;
+                LongOption = "";
+                NumberOfArguments = UNINTIALIZED;
+                HasOptionalArgument = false;
+                IsRequired = false;
+                ValueSeparator = VALUE_SEPARATOR;
             }
 
             public Option Build()
