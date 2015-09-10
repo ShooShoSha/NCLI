@@ -26,7 +26,6 @@ namespace NCLI
     {
         private CommandLine commandLine;
         private Options options;
-        private 
         #region ICommandLineParser Members
         public CommandLine Parse(Options options, string[] arguments)
         {
