@@ -11,6 +11,11 @@ namespace NCLI.UnitTests
     public class OptionTests
     {
         [Test]
+        public void Constant_Uninitialized_ReturnsConstantInteger()
+        {
+            Assert.AreEqual(-1, Option.UNINTIALIZED);
+        }
+        [Test]
         public void Constant_UnlimitedValues_ReturnsConstantInteger()
         {
             Assert.AreEqual(-2, Option.UNLIMITED_VALUES);
@@ -40,9 +45,43 @@ namespace NCLI.UnitTests
             Assert.AreEqual("-", Option.SHORT_OPT_PREFIX);
         }
 
-        private Option MakeOption()
+        [Test]
+        public void GetHashCode_OnlyShortOption_ReturnsInteger()
         {
-            return new Option("?", "Prints help message");
+            Option option = MakeShortOption();
+            int actual = option.GetHashCode();
+            int expected = "?".GetHashCode();
+            Assert.AreEqual(expected, actual);
+        }
+
+        [Test]
+        public void GetHashCode_OnlyLongOption_ReturnsInteger()
+        {
+            Option option = MakeLongOption();
+            int actual = option.GetHashCode();
+            int expected = "help".GetHashCode();
+            Assert.AreEqual(expected, actual);
+        }
+
+        private Option MakeShortOption()
+        {
+            return new Option.Builder("?").Build();
+        }
+
+        private Option MakeLongOption()
+        {
+            return new Option.Builder("")
+            {
+                LongOption = "help"
+            }.Build();
+        }
+
+        private Option MakeShortAndLongOption()
+        {
+            return new Option.Builder("?")
+            {
+                LongOption = "help"
+            }.Build();
         }
     }
 }
