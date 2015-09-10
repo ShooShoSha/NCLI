@@ -22,10 +22,18 @@ using System.Text;
 
 namespace NCLI
 {
+    /// <summary>
+    /// A group of mutually exclusive options.
+    /// </summary>
+    /// <remarks>
+    /// An <see cref="OptionGroup"/> specifies that only one <see cref="Option"/> may be set. If two or more options are set in this group, an <see cref="Exception"/> will be thrown.
+    /// </remarks>
     [Serializable]
     public class OptionGroup : IEnumerable<Option>
     {
         private readonly Dictionary<string, Option> options = new Dictionary<string, Option>();
+        private HashSet<Option> optionMap;
+
         public Dictionary<string, Option>.KeyCollection Names
         {
             get { return options.Keys; }
