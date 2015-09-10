@@ -27,7 +27,10 @@ namespace NCLI
     public class Option : ICloneable
     {
         #region Constants
-        const int UNINTIALIZED = -1;
+        /// <summary>
+        /// Constant specifying the number of arguments for this <see cref="Option"/> is not specified.
+        /// </summary>
+        public const int UNINTIALIZED = -1;
         /// <summary>
         /// Constant specifying the number of arguments for this <see cref="Option"/> is unlimited.
         /// </summary>
@@ -120,22 +123,6 @@ namespace NCLI
         #endregion
 
         #region Constructors
-        public Option(string shortOption, string description) : this(shortOption, null, false, description) { }
-
-        public Option(string shortOption, bool hasArg, string description) : this(shortOption, null, hasArg, description) { }
-
-        public Option(string shortOption, string longOption, bool hasArg, string description)
-        {
-            OptionValidator.Validate(shortOption);
-            ShortOption = shortOption;
-            LongOption = longOption;
-            if (hasArg)
-            {
-                NumberOfArguments = 1;
-            }
-            Description = description;
-        }
-
         private Option(Builder builder)
         {
             ShortOption = builder.ShortOption;
