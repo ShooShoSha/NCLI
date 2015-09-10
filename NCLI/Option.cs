@@ -26,6 +26,7 @@ namespace NCLI
     [Serializable]
     public class Option : ICloneable
     {
+        #region Constants
         const int UNINTIALIZED = -1;
         /// <summary>
         /// Constant specifying the number of arguments for this <see cref="Option"/> is unlimited.
@@ -46,7 +47,8 @@ namespace NCLI
         /// <summary>
         /// Constant specifying the prefix before the short <see cref="Option"/> name.
         /// </summary>
-        public const string SHORT_OPT_PREFIX = "-";
+        public const string SHORT_OPT_PREFIX = "-"; 
+        #endregion
 
         #region Properties
         /// <summary>
