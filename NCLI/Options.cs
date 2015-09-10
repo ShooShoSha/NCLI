@@ -33,7 +33,7 @@ namespace NCLI
         private readonly Dictionary<string, OptionGroup> optionGroups = new Dictionary<string, OptionGroup>();
 
         private HashSet<Option> options;
-        private HashSet<OptionGroup> optionGroups;
+        //private HashSet<OptionGroup> optionGroups;
 
         /// <summary>
         /// Adds the specified option group.
@@ -51,7 +51,7 @@ namespace NCLI
 
         public Options AddOption(Option option)
         {
-
+            throw new NotImplementedException();
         }
 
         #region IEnumerable Members
