@@ -86,13 +86,28 @@ namespace NCLI
         /// Indicates if this <see cref="Option"/>'s arguments are optional.
         /// </summary>
         public bool HasOptionalArgument { get; set; }
+        private int numberOfArguments;
         /// <summary>
         /// The number of arguments this <see cref="Option"/> accepts.
         /// </summary>
         /// <remarks>
         /// The typical values for <see cref="NumberOfArguments"/> are <see cref="UNINITIALIZED"/>, <see cref="UNLIMITED_VALUES"/>, or an integer with a value of at least zero (>= 0).
         /// </remarks>
-        public int NumberOfArguments { get; set; }
+        public int NumberOfArguments
+        {
+            get
+            {
+                return numberOfArguments;
+            }
+            set
+            {
+                if (value < UNLIMITED_VALUES && value < UNINTIALIZED)
+                {
+                    throw new ArgumentOutOfRangeException("NumberOfArguments is below the minimum");
+                }
+                numberOfArguments = value;
+            }
+        }
         /// <summary>
         /// The character that delimits the <see cref="Option"/> name (<see cref="ShortOption"/> or <see cref="LongOption"/>) and its arguments.
         /// </summary>
@@ -143,7 +158,7 @@ namespace NCLI
 
         public bool HasValueSeparator()
         {
-            return ValueSeparator > 0;
+            return !Char.IsControl(ValueSeparator);
         }
 
         void AddValueForProcessing(string value)
@@ -245,7 +260,7 @@ namespace NCLI
             {
                 return false;
             }
-            return true;
+            return this.GetHashCode() == option.GetHashCode();
         }
 
         public override string ToString()
@@ -315,7 +330,11 @@ namespace NCLI
             {
                 if (string.IsNullOrEmpty(ShortOption) && string.IsNullOrEmpty(LongOption))
                 {
-                    throw new ArgumentException("Either Option or LongOption must be specified");
+                    throw new ArgumentException("Either ShortOption or LongOption must be specified");
+                }
+                if (NumberOfArguments < UNLIMITED_VALUES && NumberOfArguments < UNINTIALIZED)
+                {
+                    throw new ArgumentOutOfRangeException("NumberOfArguments is below the minimum");
                 }
                 return new Option(this);
             }
